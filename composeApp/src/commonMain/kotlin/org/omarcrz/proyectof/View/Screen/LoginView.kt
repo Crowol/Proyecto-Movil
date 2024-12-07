@@ -1,6 +1,7 @@
 package org.omarcrz.proyectof.View.Screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -13,8 +14,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.painterResource
 
+
+// Definimos los colores basados en la paleta del logo
+val RedCatalunya = Color(0xFFC21807) // Rojo predominante
+val YellowGold = Color(0xFFFFC107) // Amarillo dorado
+val BackgroundWhite = Color(0xFFFFFFFF) // Blanco de fondo
 
 @Composable
 fun LoginView(
@@ -28,7 +33,8 @@ fun LoginView(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .background(BackgroundWhite),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -36,32 +42,43 @@ fun LoginView(
         Text(
             text = "INICIO DE SESIÓN",
             fontSize = 20.sp,
-            color = Color.Black,
+            color = RedCatalunya, // Cambiado al rojo del logo
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        //Aqui va la imagen
+        // Imagen (placeholder)
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Campo de correo
         OutlinedTextField(
             value = email,
             onValueChange = onEmailChange,
-            label = { Text("CORREO") },
+            label = { Text("CORREO", color = RedCatalunya) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp)
+                .padding(bottom = 8.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = RedCatalunya,
+                unfocusedBorderColor = YellowGold,
+                textColor = Color.Black
+            )
         )
 
         // Campo de contraseña
         OutlinedTextField(
             value = password,
             onValueChange = onPasswordChange,
-            label = { Text("CONTRASEÑA") },
+            label = { Text("CONTRASEÑA", color = RedCatalunya) },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(bottom = 16.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = RedCatalunya,
+                unfocusedBorderColor = YellowGold,
+                textColor = Color.Black
+            )
         )
 
         // Mensaje de error
@@ -76,6 +93,10 @@ fun LoginView(
         // Botón de ingresar
         Button(
             onClick = onLoginClick,
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = RedCatalunya, // Botón rojo
+                contentColor = BackgroundWhite // Texto blanco
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)

@@ -1,25 +1,16 @@
 package org.omarcrz.proyectof.View.Screen
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+
 
 @Composable
 fun UsuariosView(
@@ -35,6 +26,7 @@ fun UsuariosView(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(BackgroundWhite)
             .padding(16.dp)
     ) {
         // Botones de navegación en la parte superior
@@ -48,13 +40,13 @@ fun UsuariosView(
             Button(
                 onClick = { onScreenChange("Usuarios") },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = if (currentScreen != "Usuarios") MaterialTheme.colors.primary else Color.Transparent
+                    backgroundColor = if (currentScreen != "Usuarios") RedCatalunya else Color.Transparent
                 ),
                 elevation = ButtonDefaults.elevation(0.dp)
             ) {
                 Text(
                     text = "Usuarios",
-                    color = if (currentScreen != "Usuarios") Color.White else MaterialTheme.colors.primary
+                    color = if (currentScreen != "Usuarios") BackgroundWhite else RedCatalunya
                 )
             }
 
@@ -62,13 +54,13 @@ fun UsuariosView(
             Button(
                 onClick = { onScreenChange("NuevoUsuario") },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = if (currentScreen != "NuevoUsuario") MaterialTheme.colors.primary else Color.Transparent
+                    backgroundColor = if (currentScreen != "NuevoUsuario") RedCatalunya else Color.Transparent
                 ),
                 elevation = ButtonDefaults.elevation(0.dp)
             ) {
                 Text(
                     text = "Nuevo",
-                    color = if (currentScreen != "NuevoUsuario") Color.White else MaterialTheme.colors.primary
+                    color = if (currentScreen != "NuevoUsuario") BackgroundWhite else RedCatalunya
                 )
             }
         }
@@ -81,7 +73,7 @@ fun UsuariosView(
                 onNombreChange = onNombreChange,
                 correo = correo,
                 onCorreoChange = onCorreoChange,
-                contraseña =  contraseña,
+                contraseña = contraseña,
                 onContraseñaChange = onContraseñaChange
             )
         }
@@ -90,8 +82,6 @@ fun UsuariosView(
 
 @Composable
 fun UsuariosContent() {
-    // Aquí puedes agregar el contenido de la pantalla "Usuarios"
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -101,6 +91,7 @@ fun UsuariosContent() {
     ) {
         Text(
             text = "LISTA DE USUARIOS",
+            color = RedCatalunya,
             style = MaterialTheme.typography.h6,
             modifier = Modifier.padding(bottom = 24.dp)
         )
@@ -125,36 +116,62 @@ fun NuevoUsuarioContent(
     ) {
         Text(
             text = "NUEVO USUARIO",
+            color = RedCatalunya,
             style = MaterialTheme.typography.h6,
             modifier = Modifier.padding(bottom = 24.dp)
         )
+
         OutlinedTextField(
             value = nombre,
             onValueChange = onNombreChange,
-            label = { Text("Nombre") },
-            modifier = Modifier.fillMaxWidth()
+            label = { Text("Nombre", color = RedCatalunya) },
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = RedCatalunya,
+                unfocusedBorderColor = YellowGold,
+                textColor = Color.Black
+            )
         )
+
         OutlinedTextField(
             value = correo,
             onValueChange = onCorreoChange,
-            label = { Text("Correo") },
-            modifier = Modifier.fillMaxWidth()
+            label = { Text("Correo", color = RedCatalunya) },
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = RedCatalunya,
+                unfocusedBorderColor = YellowGold,
+                textColor = Color.Black
+            )
         )
+
         OutlinedTextField(
             value = contraseña,
             onValueChange = onContraseñaChange,
-            label = { Text("contraseña") },
-            modifier = Modifier.fillMaxWidth()
+            label = { Text("Contraseña", color = RedCatalunya) },
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = RedCatalunya,
+                unfocusedBorderColor = YellowGold,
+                textColor = Color.Black
+            )
         )
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Button(
             onClick = { /* Acción de agregar usuario */ },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = RedCatalunya,
+                contentColor = BackgroundWhite
+            ),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text("Agregar Usuario")
         }
     }
 }
+
 
 
 
