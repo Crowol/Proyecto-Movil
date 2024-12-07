@@ -5,12 +5,16 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
 
@@ -160,6 +164,9 @@ fun NuevoContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Next
+            ),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = RedCatalunya,
                 unfocusedBorderColor = YellowGold,
@@ -174,6 +181,10 @@ fun NuevoContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = RedCatalunya,
                 unfocusedBorderColor = YellowGold,
@@ -188,6 +199,15 @@ fun NuevoContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onAgregarClick()
+                }
+            ),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = RedCatalunya,
                 unfocusedBorderColor = YellowGold,

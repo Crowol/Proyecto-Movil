@@ -3,6 +3,7 @@ package org.omarcrz.proyectof.View.Screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -57,6 +59,9 @@ fun LoginView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = RedCatalunya,
                 unfocusedBorderColor = YellowGold,
@@ -70,10 +75,17 @@ fun LoginView(
             onValueChange = onPasswordChange,
             label = { Text("CONTRASEÑA", color = RedCatalunya) },
             visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onLoginClick()
+                }
+            ),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = RedCatalunya,
                 unfocusedBorderColor = YellowGold,

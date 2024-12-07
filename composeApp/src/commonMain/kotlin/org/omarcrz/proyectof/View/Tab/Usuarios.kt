@@ -43,7 +43,8 @@ object Usuarios : Tab {
                 correo = correo,
                 onCorreoChange = { correo = it },
                 contraseña = contraseña,
-                onContraseñaChange = {contraseña = it}
+                onContraseñaChange = {contraseña = it},
+                onUsuarioClick = { /* Insert en la BD */ }
             )
         }
 
