@@ -55,13 +55,13 @@ fun VentasView(
             Button(
                 onClick = { onScreenChange("Ventas") },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = if (currentScreen == "Ventas") MaterialTheme.colors.primary else Color.Transparent
+                    backgroundColor = if (currentScreen != "Ventas") MaterialTheme.colors.primary else Color.Transparent
                 ),
                 elevation = ButtonDefaults.elevation(0.dp)
             ) {
                 Text(
                     text = "Ventas",
-                    color = if (currentScreen == "Ventas") Color.White else MaterialTheme.colors.primary
+                    color = if (currentScreen != "Ventas") Color.White else MaterialTheme.colors.primary
                 )
             }
 
@@ -69,13 +69,13 @@ fun VentasView(
             Button(
                 onClick = { onScreenChange("Nuevo") },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = if (currentScreen == "Nuevo") MaterialTheme.colors.primary else Color.Transparent
+                    backgroundColor = if (currentScreen != "Nuevo") MaterialTheme.colors.primary else Color.Transparent
                 ),
                 elevation = ButtonDefaults.elevation(0.dp)
             ) {
                 Text(
                     text = "Nuevo",
-                    color = if (currentScreen == "Nuevo") Color.White else MaterialTheme.colors.primary
+                    color = if (currentScreen != "Nuevo") Color.White else MaterialTheme.colors.primary
                 )
             }
         }
