@@ -109,6 +109,7 @@ fun LoginView(
                 backgroundColor = RedCatalunya, // Botón rojo
                 contentColor = BackgroundWhite // Texto blanco
             ),
+            enabled = (email.isNotEmpty() && password.isNotEmpty()),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)

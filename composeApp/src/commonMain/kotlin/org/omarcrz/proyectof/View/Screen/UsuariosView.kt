@@ -184,6 +184,7 @@ fun NuevoUsuarioContent(
                 backgroundColor = RedCatalunya,
                 contentColor = BackgroundWhite
             ),
+            enabled = nombre.isNotEmpty() && correo.isNotEmpty() && contraseña.isNotEmpty(),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text("Agregar Usuario")
