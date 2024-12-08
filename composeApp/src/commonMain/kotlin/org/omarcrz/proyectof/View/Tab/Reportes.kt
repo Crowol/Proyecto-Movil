@@ -26,6 +26,6 @@ object Reportes : Tab {
 
     @Composable
     override fun Content() {
-        ReportesView(title = "Reportes")
+        ReportesView()
     }
 }
