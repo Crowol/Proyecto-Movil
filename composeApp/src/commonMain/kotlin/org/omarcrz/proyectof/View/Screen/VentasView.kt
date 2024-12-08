@@ -38,6 +38,7 @@ fun VentasView(
             .fillMaxSize()
             .background(BackgroundWhite)
             .padding(16.dp)
+            .padding(bottom = 40.dp)
     ) {
         // Botones de navegación en la parte superior
         Row(
@@ -147,6 +148,7 @@ fun NuevoContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -234,6 +236,7 @@ fun Carrito() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .padding(bottom = 56.dp)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

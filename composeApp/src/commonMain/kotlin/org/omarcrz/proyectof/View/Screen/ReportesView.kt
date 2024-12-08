@@ -18,6 +18,7 @@ fun ReportesView() {
             .fillMaxSize()
             .background(BackgroundWhite)
             .padding(16.dp)
+            .padding(bottom = 40.dp)
     ) {
         // Contenido de los reportes
         ReportesContent()

@@ -18,6 +18,7 @@ fun InventarioView() {
             .fillMaxSize()
             .background(BackgroundWhite)
             .padding(16.dp)
+            .padding(bottom = 40.dp)
     ) {
         // Contenido del inventario
         InventarioContent()

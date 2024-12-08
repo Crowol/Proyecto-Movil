@@ -34,6 +34,7 @@ fun UsuariosView(
             .fillMaxSize()
             .background(BackgroundWhite)
             .padding(16.dp)
+            .padding(bottom = 40.dp)
     ) {
         // Botones de navegación en la parte superior
         Row(
