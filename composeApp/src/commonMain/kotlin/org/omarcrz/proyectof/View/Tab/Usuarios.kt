@@ -1,6 +1,7 @@
 package org.omarcrz.proyectof.View.Tab
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,7 +19,7 @@ object Usuarios : Tab {
     override val options: TabOptions
         @Composable
         get() {
-            val icon = rememberVectorPainter(Icons.Filled.CheckCircle)
+            val icon = rememberVectorPainter(Icons.Filled.AccountCircle)
             return remember {
                 TabOptions(
                     index = 0u,

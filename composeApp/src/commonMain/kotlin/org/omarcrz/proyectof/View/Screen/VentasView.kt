@@ -223,7 +223,7 @@ fun NuevoContent(
             ),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "AGREGAR")
+            Text(text = "Agregar producto")
         }
     }
 }
@@ -266,7 +266,7 @@ fun Carrito() {
             ),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "PAGAR")
+            Text(text = "Pagar")
         }
     }
 }

@@ -89,9 +89,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics.android)
     implementation(libs.androidx.ui.android)
     implementation(libs.androidx.foundation.android)
+    implementation(libs.androidx.room.common)
     debugImplementation(compose.uiTooling)
 }
-
-
-
-
