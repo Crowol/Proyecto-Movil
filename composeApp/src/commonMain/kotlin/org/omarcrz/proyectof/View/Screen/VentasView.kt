@@ -223,7 +223,7 @@ fun NuevoContent(
                 backgroundColor = RedCatalunya,
                 contentColor = BackgroundWhite
             ),
-            enabled = nombre.isNotEmpty() && cantidad.isNotEmpty() && precio.isNotEmpty(),
+            enabled = nombre.isNotBlank() && cantidad.isNotBlank() && precio.isNotBlank(),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text(text = "Agregar producto")
