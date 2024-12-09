@@ -16,6 +16,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.painterResource
+import proyectofinal.composeapp.generated.resources.Logo
+import proyectofinal.composeapp.generated.resources.Res
+import proyectofinal.composeapp.generated.resources.compose_multiplatform
 
 
 // Definimos los colores basados en la paleta del logo
@@ -40,6 +44,9 @@ fun LoginView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Image(painterResource(Res.drawable.Logo),null,modifier = Modifier.fillMaxWidth())
+        Spacer(modifier = Modifier.height(50.dp))
+
         // Título
         Text(
             text = "INICIO DE SESIÓN",
@@ -49,7 +56,6 @@ fun LoginView(
         )
 
         // Imagen (placeholder)
-        Spacer(modifier = Modifier.height(16.dp))
 
         // Campo de correo
         OutlinedTextField(
