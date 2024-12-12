@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1092622654676",
+    "project_id": "fir-pm-fd628",
+    "storage_bucket": "fir-pm-fd628.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092622654676:android:2b16884a78bc4434882f41",
+        "android_client_info": {
+          "package_name": "org.omarcrz.proyectof"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAyA-Ag__1YGPDWB_Aa2GXmimGJhP0PTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
