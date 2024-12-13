@@ -26,6 +26,6 @@ object Inventario : Tab {
 
     @Composable
     override fun Content() {
-        InventarioView(title = "Inventario")
+        InventarioView()
     }
 }

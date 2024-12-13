@@ -2,27 +2,21 @@ package org.omarcrz.proyectof.View.Screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+
 
 @Composable
 fun VentasView(
@@ -42,7 +36,9 @@ fun VentasView(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(BackgroundWhite)
             .padding(16.dp)
+            .padding(bottom = 40.dp)
     ) {
         // Botones de navegación en la parte superior
         Row(
@@ -55,13 +51,13 @@ fun VentasView(
             Button(
                 onClick = { onScreenChange("Ventas") },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = if (currentScreen == "Ventas") MaterialTheme.colors.primary else Color.Transparent
+                    backgroundColor = if (currentScreen != "Ventas") RedCatalunya else Color.Transparent
                 ),
                 elevation = ButtonDefaults.elevation(0.dp)
             ) {
                 Text(
                     text = "Ventas",
-                    color = if (currentScreen == "Ventas") Color.White else MaterialTheme.colors.primary
+                    color = if (currentScreen != "Ventas") BackgroundWhite else RedCatalunya
                 )
             }
 
@@ -69,21 +65,21 @@ fun VentasView(
             Button(
                 onClick = { onScreenChange("Nuevo") },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = if (currentScreen == "Nuevo") MaterialTheme.colors.primary else Color.Transparent
+                    backgroundColor = if (currentScreen != "Nuevo") RedCatalunya else Color.Transparent
                 ),
                 elevation = ButtonDefaults.elevation(0.dp)
             ) {
                 Text(
                     text = "Nuevo",
-                    color = if (currentScreen == "Nuevo") Color.White else MaterialTheme.colors.primary
+                    color = if (currentScreen != "Nuevo") BackgroundWhite else RedCatalunya
                 )
             }
         }
 
         // Contenido dinámico según la pantalla seleccionada
         when (currentScreen) {
-            "Ventas" -> VentasContent(onCarritoClick = onCarritoClick, searchQuery = searchQuery, onSearchQueryChange = onSearchQueryChange)
-            "Nuevo" -> NuevoContent(nombre = nombre, onNombreChange = onNombreChange, cantidad = cantidad, onCantidadChange = onCantidadChange, precio = precio, onPrecioChange = onPrecioChange, onAgregarClick = onAgregarClick)
+            "Ventas" -> VentasContent(onCarritoClick, searchQuery, onSearchQueryChange)
+            "Nuevo" -> NuevoContent(nombre, onNombreChange, cantidad, onCantidadChange, precio, onPrecioChange, onAgregarClick)
             "Carrito" -> Carrito()
         }
     }
@@ -101,6 +97,7 @@ fun VentasContent(onCarritoClick: () -> Unit, searchQuery: String, onSearchQuery
         // Sección de productos
         Text(
             text = "PRODUCTOS",
+            color = RedCatalunya,
             style = MaterialTheme.typography.h6,
             modifier = Modifier.padding(bottom = 24.dp)
         )
@@ -109,12 +106,17 @@ fun VentasContent(onCarritoClick: () -> Unit, searchQuery: String, onSearchQuery
         OutlinedTextField(
             value = searchQuery,
             onValueChange = onSearchQueryChange,
-            label = { Text("Buscar") },
+            label = { Text("Buscar", color = RedCatalunya) },
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(8.dp))
-                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
-                .padding(bottom = 16.dp)
+                .background(BackgroundWhite, shape = RoundedCornerShape(8.dp))
+                .border(1.dp, RedCatalunya, RoundedCornerShape(8.dp))
+                .padding(bottom = 16.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = RedCatalunya,
+                unfocusedBorderColor = YellowGold,
+                textColor = Color.Black
+            )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -122,6 +124,10 @@ fun VentasContent(onCarritoClick: () -> Unit, searchQuery: String, onSearchQuery
         // Botón del carrito
         Button(
             onClick = onCarritoClick,
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = RedCatalunya,
+                contentColor = BackgroundWhite
+            ),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text(text = "Carrito")
@@ -142,11 +148,13 @@ fun NuevoContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "AGREGAR PRODUCTO",
+            color = RedCatalunya,
             style = MaterialTheme.typography.h6,
             modifier = Modifier.padding(bottom = 24.dp)
         )
@@ -154,35 +162,71 @@ fun NuevoContent(
         OutlinedTextField(
             value = nombre,
             onValueChange = onNombreChange,
-            label = { Text("Nombre") },
+            label = { Text("Nombre", color = RedCatalunya) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(bottom = 16.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Next
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = RedCatalunya,
+                unfocusedBorderColor = YellowGold,
+                textColor = Color.Black
+            )
         )
 
         OutlinedTextField(
             value = cantidad,
             onValueChange = onCantidadChange,
-            label = { Text("Cantidad") },
+            label = { Text("Cantidad", color = RedCatalunya) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 16.dp)
+                .padding(bottom = 16.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = RedCatalunya,
+                unfocusedBorderColor = YellowGold,
+                textColor = Color.Black
+            )
         )
 
         OutlinedTextField(
             value = precio,
             onValueChange = onPrecioChange,
-            label = { Text("Precio") },
+            label = { Text("Precio", color = RedCatalunya) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 24.dp)
+                .padding(bottom = 24.dp),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onAgregarClick()
+                }
+            ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = RedCatalunya,
+                unfocusedBorderColor = YellowGold,
+                textColor = Color.Black
+            )
         )
 
         Button(
             onClick = onAgregarClick,
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = RedCatalunya,
+                contentColor = BackgroundWhite
+            ),
+            enabled = nombre.isNotBlank() && cantidad.isNotBlank() && precio.isNotBlank(),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "AGREGAR")
+            Text(text = "Agregar producto")
         }
     }
 }
@@ -193,48 +237,40 @@ fun Carrito() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .verticalScroll(rememberScrollState()), // Habilitar scroll
+            .padding(bottom = 56.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Título
         Text(
             text = "CARRITO",
+            color = RedCatalunya,
             style = MaterialTheme.typography.h6,
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        // Contenedor para los detalles del carrito
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f) // Permite que este bloque ocupe todo el espacio restante
-                .border(2.dp, Color.Black)
+                .weight(1f)
+                .border(2.dp, RedCatalunya)
                 .padding(16.dp)
         ) {
-            Text(
-                text = "NOMBRE",
-                modifier = Modifier.padding(bottom = 8.dp),
-                style = MaterialTheme.typography.body1
-            )
-            Text(
-                text = "CANTIDAD",
-                modifier = Modifier.padding(bottom = 8.dp),
-                style = MaterialTheme.typography.body1
-            )
-            Text(
-                text = "PRECIO",
-                style = MaterialTheme.typography.body1
-            )
+            Text(text = "NOMBRE", color = RedCatalunya, modifier = Modifier.padding(bottom = 8.dp))
+            Text(text = "CANTIDAD", color = RedCatalunya, modifier = Modifier.padding(bottom = 8.dp))
+            Text(text = "PRECIO", color = RedCatalunya)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Botón Pagar
         Button(
             onClick = { /* Acción de pagar */ },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = RedCatalunya,
+                contentColor = BackgroundWhite
+            ),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text(text = "PAGAR")
+            Text(text = "Pagar")
         }
     }
 }
