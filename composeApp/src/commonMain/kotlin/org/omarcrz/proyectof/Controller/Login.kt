@@ -19,11 +19,7 @@ class Login : Screen {
         var errorMessage by remember { mutableStateOf<String?>(null) }
 
         fun onLoginClick() {
-            if (validateCredentials(email, password)) {
-                navigator?.push(Nav())
-            } else {
-                errorMessage = "Credenciales inválidas"
-            }
+            navigator?.push(Nav())
         }
 
         LoginView(
@@ -36,8 +32,8 @@ class Login : Screen {
         )
     }
 
-    private fun validateCredentials(email: String, password: String): Boolean {
+   /* private fun validateCredentials(email: String, password: String): Boolean {
         // Lógica para validar las credenciales (Aqui son las buenas xd)
         return email == "Admin" && password == "Admin"
-    }
+    }*/
 }

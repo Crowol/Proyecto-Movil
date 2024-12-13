@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.Tab
 
+
 @Composable
 fun NavView(
     currentTab: Tab,
@@ -17,19 +18,30 @@ fun NavView(
 ) {
     Scaffold(
         bottomBar = {
-            BottomNavigation {
+            BottomNavigation(
+                backgroundColor = RedCatalunya, // Fondo rojo
+                contentColor = BackgroundWhite // Texto e íconos blancos
+            ) {
                 tabs.forEach { tab ->
                     BottomNavigationItem(
                         selected = currentTab.key == tab.key,
-                        label = { Text(tab.options.title) },
+                        label = {
+                            Text(
+                                text = tab.options.title,
+                                color = if (currentTab.key == tab.key) YellowGold else BackgroundWhite // Amarillo para el seleccionado
+                            )
+                        },
                         icon = {
                             tab.options.icon?.let {
                                 Icon(
                                     painter = it,
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    tint = if (currentTab.key == tab.key) YellowGold else BackgroundWhite // Ícono amarillo si está seleccionado
                                 )
                             }
                         },
+                        selectedContentColor = YellowGold, // Color de ícono seleccionado
+                        unselectedContentColor = BackgroundWhite, // Color de ícono no seleccionado
                         onClick = { onTabSelected(tab) }
                     )
                 }
@@ -39,4 +51,3 @@ fun NavView(
         CurrentTab()
     }
 }
-

@@ -3,6 +3,7 @@ package org.omarcrz.proyectof.View.Screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,19 +11,56 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.firestore.firestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.omarcrz.proyectof.Model.Producto
+import org.omarcrz.proyectof.Model.Users
+import org.omarcrz.proyectof.View.Tab.Ventas.VentasItem
+
+suspend fun getProductos(): List<Producto> {
+    val firebaseFirestore = Firebase.firestore
+    return try {
+        val productResponse = firebaseFirestore.collection("Productos").get()
+        productResponse.documents.mapNotNull {
+            it.data<Producto>() // Mapear directamente a Producto usando serialization
+        }
+    } catch (e: Exception) {
+        throw e
+    }
+}
 
 @Composable
 fun VentasView(
@@ -37,204 +75,185 @@ fun VentasView(
     onCantidadChange: (String) -> Unit,
     precio: String,
     onPrecioChange: (String) -> Unit,
+    costo: String,
+    onCostoChange: (String) -> Unit,
     onAgregarClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Botones de navegación en la parte superior
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Botón "Ventas"
-            Button(
-                onClick = { onScreenChange("Ventas") },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = if (currentScreen == "Ventas") MaterialTheme.colors.primary else Color.Transparent
-                ),
-                elevation = ButtonDefaults.elevation(0.dp)
-            ) {
+    VentasContent();
+}
+
+@Composable
+fun VentasContent() {
+    var list by remember { mutableStateOf<List<Producto>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    // Estados para el modal
+    var isModalVisible by remember { mutableStateOf(false) }
+    var selectedProducto by remember { mutableStateOf<Producto?>(null) }
+    var cantidadPedido by remember { mutableStateOf("1") }
+    var precioPedido by remember { mutableStateOf("1") }// Estado para la cantidad de pedido
+
+    // Lógica para cargar productos en un LaunchedEffect
+    LaunchedEffect(Unit) {
+        try {
+            isLoading = true
+            errorMessage = null
+            list = getProductos() // Reemplaza con tu función suspendida para obtener productos
+        } catch (e: Exception) {
+            errorMessage = "Error al cargar productos: ${e.message}"
+        } finally {
+            isLoading = false
+        }
+    }
+
+    // Modal de confirmación para agregar al carrito
+    if (isModalVisible && selectedProducto != null) {
+        AlertDialog(
+            onDismissRequest = {
+                isModalVisible = false
+            },
+            title = {
                 Text(
-                    text = "Ventas",
-                    color = if (currentScreen == "Ventas") Color.White else MaterialTheme.colors.primary
+                    text = "Realizar Pedido",
+                    fontSize = 20.sp,
+                    color = RedCatalunya // Color del título
                 )
-            }
-
-            // Botón "Nuevo"
-            Button(
-                onClick = { onScreenChange("Nuevo") },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = if (currentScreen == "Nuevo") MaterialTheme.colors.primary else Color.Transparent
-                ),
-                elevation = ButtonDefaults.elevation(0.dp)
-            ) {
-                Text(
-                    text = "Nuevo",
-                    color = if (currentScreen == "Nuevo") Color.White else MaterialTheme.colors.primary
-                )
-            }
-        }
-
-        // Contenido dinámico según la pantalla seleccionada
-        when (currentScreen) {
-            "Ventas" -> VentasContent(onCarritoClick = onCarritoClick, searchQuery = searchQuery, onSearchQueryChange = onSearchQueryChange)
-            "Nuevo" -> NuevoContent(nombre = nombre, onNombreChange = onNombreChange, cantidad = cantidad, onCantidadChange = onCantidadChange, precio = precio, onPrecioChange = onPrecioChange, onAgregarClick = onAgregarClick)
-            "Carrito" -> Carrito()
-        }
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "¿Cuántas piezas de ${selectedProducto?.Descripcion} va a hacer pedido?",
+                        color = Color.Black, // Color del texto
+                        style = MaterialTheme.typography.body1
+                    )
+                    // Entrada de datos numérica
+                    OutlinedTextField(
+                        value = cantidadPedido,
+                        onValueChange = { cantidadPedido = it.filter { char -> char.isDigit() } }, // Filtrar solo números
+                        label = { Text("Cantidad") },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number
+                        ),
+                        singleLine = true
+                    )
+                    // Entrada de datos numérica precio
+                    OutlinedTextField(
+                        value = precioPedido,
+                        onValueChange = { precioPedido = it.filter { char -> char.isDigit() } }, // Filtrar solo números
+                        label = { Text("Precio") },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number
+                        ),
+                        singleLine = true
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        hacerPedido(selectedProducto!!, cantidadPedido.toInt())
+                        isModalVisible = false
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = RedCatalunya)
+                ) {
+                    Text(
+                        text = "Aceptar",
+                        color = RedCatalunya, // Color del botón
+                        fontSize = 16.sp
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        isModalVisible = false
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = YellowGold)
+                ) {
+                    Text(
+                        text = "Atrás",
+                        color = YellowGold, // Color del botón
+                        fontSize = 16.sp
+                    )
+                }
+            },
+            backgroundColor = BackgroundWhite, // Fondo blanco del modal
+            contentColor = Color.Black // Color de contenido
+        )
     }
-}
 
-@Composable
-fun VentasContent(onCarritoClick: () -> Unit, searchQuery: String, onSearchQueryChange: (String) -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Sección de productos
-        Text(
-            text = "PRODUCTOS",
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-
-        // Campo de búsqueda
-        OutlinedTextField(
-            value = searchQuery,
-            onValueChange = onSearchQueryChange,
-            label = { Text("Buscar") },
+    Box(modifier = Modifier.fillMaxSize().padding(bottom = 40.dp)) {
+        LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(8.dp))
-                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
-                .padding(bottom = 16.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Botón del carrito
-        Button(
-            onClick = onCarritoClick,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "Carrito")
-        }
-    }
-}
-
-@Composable
-fun NuevoContent(
-    nombre: String,
-    onNombreChange: (String) -> Unit,
-    cantidad: String,
-    onCantidadChange: (String) -> Unit,
-    precio: String,
-    onPrecioChange: (String) -> Unit,
-    onAgregarClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "AGREGAR PRODUCTO",
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-
-        OutlinedTextField(
-            value = nombre,
-            onValueChange = onNombreChange,
-            label = { Text("Nombre") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
-
-        OutlinedTextField(
-            value = cantidad,
-            onValueChange = onCantidadChange,
-            label = { Text("Cantidad") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
-
-        OutlinedTextField(
-            value = precio,
-            onValueChange = onPrecioChange,
-            label = { Text("Precio") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 24.dp)
-        )
-
-        Button(
-            onClick = onAgregarClick,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "AGREGAR")
-        }
-    }
-}
-
-@Composable
-fun Carrito() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()), // Habilitar scroll
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Título
-        Text(
-            text = "CARRITO",
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-
-        // Contenedor para los detalles del carrito
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f) // Permite que este bloque ocupe todo el espacio restante
-                .border(2.dp, Color.Black)
+                .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Text(
-                text = "NOMBRE",
-                modifier = Modifier.padding(bottom = 8.dp),
-                style = MaterialTheme.typography.body1
-            )
-            Text(
-                text = "CANTIDAD",
-                modifier = Modifier.padding(bottom = 8.dp),
-                style = MaterialTheme.typography.body1
-            )
-            Text(
-                text = "PRECIO",
-                style = MaterialTheme.typography.body1
-            )
-        }
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "PRODUCTOS",
+                        color = RedCatalunya,
+                        style = MaterialTheme.typography.h6
+                    )
+                }
+            }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            // Mostrar diferentes estados dependiendo de la carga o errores
+            when {
+                isLoading -> {
+                    item {
+                        Text("Cargando productos...", style = MaterialTheme.typography.body1)
+                    }
+                }
 
-        // Botón Pagar
-        Button(
-            onClick = { /* Acción de pagar */ },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(text = "PAGAR")
+                errorMessage != null -> {
+                    item {
+                        Text(
+                            text = errorMessage ?: "No se encontraron productos.",
+                            color = MaterialTheme.colors.error,
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
+                }
+
+                list.isEmpty() -> {
+                    item {
+                        Text(
+                            text = "No hay productos disponibles.",
+                            color = MaterialTheme.typography.body1.color,
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
+                }
+
+                else -> {
+                    items(list) { producto ->
+                        VentasItem(
+                            producto = producto,
+                            onClick = {
+                                selectedProducto = producto
+                                isModalVisible = true
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }
+
+fun hacerPedido(selectedProducto: Producto, toInt: Int) {
+    /*
+    Aqui la logica para hacer el pedido xddd
+     */
+}
+
+
