@@ -316,6 +316,7 @@ fun EditProductoModal(
                     CoroutineScope(Dispatchers.IO).launch {
                         try {
                             val firestore = Firebase.firestore
+                            println("Código del producto a actualizar: ${updatedProducto.codigo}") // Verificar el ID del documento
                             firestore.collection("Productos")
                                 .document(updatedProducto.codigo)
                                 .update(
@@ -326,8 +327,7 @@ fun EditProductoModal(
                                         "PrecioVenta" to updatedProducto.PrecioVenta
                                     )
                                 )
-
-                            //Intente pero falle xddd
+                            println("Producto actualizado correctamente en Firestore")
 
                             // Si es exitoso, actualiza la lista y cierra el modal
                             withContext(Dispatchers.Main) {
@@ -335,8 +335,12 @@ fun EditProductoModal(
                                 onDismiss() // Cierra el modal
                             }
                         } catch (e: Exception) {
-                            println("Error al actualizar producto: ${e.message}")
+                            withContext(Dispatchers.Main) {
+                                println("Error al actualizar producto: ${e.message}")
+                                onDismiss() // Cierra el modal
+                            }
                         }
+
                     }
                 },
                 colors = ButtonDefaults.buttonColors(

@@ -46,8 +46,10 @@ fun ReportesContent() {
         )
 
         ReporteItem(titulo = "Compra de Plumas", descripcion = "El dia se compraron 1000 plumas")
-        ReporteItem(titulo = "Reporte 2", descripcion = "Descripciónaa del reporte 2")
-        ReporteItem(titulo = "Reporte 3", descripcion = "Descripción del reporte 3")
+        ReporteItem(titulo = "Compra de Lapices", descripcion = "El dia 12/12/2021 se compraron Lapices " +
+                "de la marca BIC")
+        ReporteItem(titulo = "Compra de Resistol", descripcion = "El dia 11/12/2024 se compro resistol 1/2 litro " +
+                "de resistol liquido")
 
         Spacer(modifier = Modifier.height(16.dp))
     }
